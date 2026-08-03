@@ -1,12 +1,30 @@
-import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { createFileRoute, Outlet, useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { Topbar } from "@/components/layout/Topbar";
+import { useAuth } from "@/lib/auth";
 
 export const Route = createFileRoute("/_shell")({
+  ssr: false,
   component: ShellLayout,
 });
 
 function ShellLayout() {
+  const { user, ready } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (ready && !user) navigate({ to: "/login", replace: true });
+  }, [ready, user, navigate]);
+
+  if (!ready || !user) {
+    return (
+      <div className="app-canvas grid min-h-screen place-items-center">
+        <p className="text-helper text-muted-foreground">Loading your workspace…</p>
+      </div>
+    );
+  }
+
   return (
     <div className="app-canvas min-h-screen">
       <div className="mx-auto flex w-full max-w-[1600px] gap-6 px-4 pb-10 lg:px-6">
