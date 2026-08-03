@@ -20,6 +20,7 @@ import { Route as ShellDocumentsRouteImport } from './routes/_shell/documents'
 import { Route as ShellReportsRouteImport } from './routes/_shell/reports'
 import { Route as ShellSettingsRouteImport } from './routes/_shell/settings'
 import { Route as ShellTasksRouteImport } from './routes/_shell/tasks'
+import { Route as AdminAdminIndexRouteImport } from './routes/_admin/admin.index'
 import { Route as AdminAdminApprovalsRouteImport } from './routes/_admin/admin.approvals'
 import { Route as AdminAdminAuditLogsRouteImport } from './routes/_admin/admin.audit-logs'
 import { Route as AdminAdminEmployeesRouteImport } from './routes/_admin/admin.employees'
@@ -80,6 +81,11 @@ const ShellTasksRoute = ShellTasksRouteImport.update({
   path: '/tasks',
   getParentRoute: () => ShellRoute,
 } as any)
+const AdminAdminIndexRoute = AdminAdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminAdminApprovalsRoute = AdminAdminApprovalsRouteImport.update({
   id: '/admin/approvals',
   path: '/admin/approvals',
@@ -126,6 +132,7 @@ export interface FileRoutesByFullPath {
   '/admin/employees': typeof AdminAdminEmployeesRoute
   '/admin/settings': typeof AdminAdminSettingsRoute
   '/cases/$caseId': typeof ShellCasesCaseIdRoute
+  '/admin/': typeof AdminAdminIndexRoute
   '/cases/': typeof ShellCasesIndexRoute
 }
 export interface FileRoutesByTo {
@@ -143,6 +150,7 @@ export interface FileRoutesByTo {
   '/admin/employees': typeof AdminAdminEmployeesRoute
   '/admin/settings': typeof AdminAdminSettingsRoute
   '/cases/$caseId': typeof ShellCasesCaseIdRoute
+  '/admin': typeof AdminAdminIndexRoute
   '/cases': typeof ShellCasesIndexRoute
 }
 export interface FileRoutesById {
@@ -163,6 +171,7 @@ export interface FileRoutesById {
   '/_admin/admin/employees': typeof AdminAdminEmployeesRoute
   '/_admin/admin/settings': typeof AdminAdminSettingsRoute
   '/_shell/cases/$caseId': typeof ShellCasesCaseIdRoute
+  '/_admin/admin/': typeof AdminAdminIndexRoute
   '/_shell/cases/': typeof ShellCasesIndexRoute
 }
 export interface FileRouteTypes {
@@ -182,6 +191,7 @@ export interface FileRouteTypes {
     | '/admin/employees'
     | '/admin/settings'
     | '/cases/$caseId'
+    | '/admin/'
     | '/cases/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -199,6 +209,7 @@ export interface FileRouteTypes {
     | '/admin/employees'
     | '/admin/settings'
     | '/cases/$caseId'
+    | '/admin'
     | '/cases'
   id:
     | '__root__'
@@ -218,6 +229,7 @@ export interface FileRouteTypes {
     | '/_admin/admin/employees'
     | '/_admin/admin/settings'
     | '/_shell/cases/$caseId'
+    | '/_admin/admin/'
     | '/_shell/cases/'
   fileRoutesById: FileRoutesById
 }
@@ -306,6 +318,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ShellTasksRouteImport
       parentRoute: typeof ShellRoute
     }
+    '/_admin/admin/': {
+      id: '/_admin/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminAdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/_admin/admin/approvals': {
       id: '/_admin/admin/approvals'
       path: '/admin/approvals'
@@ -356,6 +375,7 @@ interface AdminRouteChildren {
   AdminAdminAuditLogsRoute: typeof AdminAdminAuditLogsRoute
   AdminAdminEmployeesRoute: typeof AdminAdminEmployeesRoute
   AdminAdminSettingsRoute: typeof AdminAdminSettingsRoute
+  AdminAdminIndexRoute: typeof AdminAdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
@@ -363,6 +383,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminAdminAuditLogsRoute: AdminAdminAuditLogsRoute,
   AdminAdminEmployeesRoute: AdminAdminEmployeesRoute,
   AdminAdminSettingsRoute: AdminAdminSettingsRoute,
+  AdminAdminIndexRoute: AdminAdminIndexRoute,
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
