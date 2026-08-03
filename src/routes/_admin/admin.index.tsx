@@ -96,7 +96,7 @@ function AdminDashboard() {
                     {a.by} · {a.when}
                   </p>
                 </div>
-                <StatusPill label={a.kind} tone="primary" />
+                <StatusPill tone="primary">{a.kind}</StatusPill>
               </li>
             ))}
           </ul>
