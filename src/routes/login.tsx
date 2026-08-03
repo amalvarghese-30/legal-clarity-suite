@@ -1,11 +1,14 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { Scale, ArrowRight } from "lucide-react";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { Scale, ArrowRight, ShieldAlert, UserCog } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useAuth } from "@/lib/auth";
 
 export const Route = createFileRoute("/login")({
+  ssr: false,
   head: () => ({
     meta: [
       { title: "Sign in · StillWorks LegalOS" },
@@ -21,6 +24,33 @@ export const Route = createFileRoute("/login")({
 });
 
 function LoginPage() {
+  const { user, ready, signIn } = useAuth();
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (ready && user) navigate({ to: user.role === "admin" ? "/admin" : "/", replace: true });
+  }, [ready, user, navigate]);
+
+  const submit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const result = signIn(email, password);
+    if (!result.ok) {
+      setError(result.error);
+      return;
+    }
+    setError(null);
+    navigate({ to: result.user.role === "admin" ? "/admin" : "/", replace: true });
+  };
+
+  const fill = (role: "admin" | "employee") => {
+    setEmail(`${role}@stillworks.legal`);
+    setPassword(`${role}123`);
+    setError(null);
+  };
+
   return (
     <div className="app-canvas grid min-h-screen lg:grid-cols-2">
       <div className="page-enter flex items-center justify-center px-6 py-16">
@@ -33,7 +63,7 @@ function LoginPage() {
             Sign in to your firm's legal operating system.
           </p>
 
-          <form className="mt-8 space-y-5" onSubmit={(e) => e.preventDefault()}>
+          <form className="mt-8 space-y-5" onSubmit={submit}>
             <div className="space-y-2">
               <Label htmlFor="email" className="text-helper">
                 Email address
@@ -42,6 +72,8 @@ function LoginPage() {
                 id="email"
                 type="email"
                 autoComplete="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@firm.legal"
                 className="h-12 rounded-md"
               />
@@ -54,31 +86,59 @@ function LoginPage() {
                 id="password"
                 type="password"
                 autoComplete="current-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 className="h-12 rounded-md"
               />
             </div>
+
+            {error ? (
+              <p role="alert" className="text-helper text-destructive">
+                {error}
+              </p>
+            ) : null}
+
             <div className="flex items-center justify-between gap-3">
               <label className="flex items-center gap-2 text-helper text-muted-foreground">
-                <Checkbox id="remember" /> Remember me
+                <Checkbox id="remember" defaultChecked /> Remember me
               </label>
               <button type="button" className="text-helper text-primary hover:underline">
                 Forgot password?
               </button>
             </div>
             <Button
-              asChild
+              type="submit"
               className="gradient-primary h-12 w-full rounded-md text-primary-foreground shadow-soft transition-transform duration-200 hover:-translate-y-0.5"
             >
-              <Link to="/">
-                Sign in <ArrowRight size={17} strokeWidth={1.75} />
-              </Link>
+              Sign in <ArrowRight size={17} strokeWidth={1.75} />
             </Button>
           </form>
 
-          <p className="mt-8 text-caption text-muted-foreground">
-            Protected by firm-managed access. Contact your administrator for an account.
-          </p>
+          <div className="mt-6 rounded-md border border-border/70 bg-card/70 p-3">
+            <p className="text-caption font-medium tracking-wide text-muted-foreground uppercase">
+              Demo access
+            </p>
+            <div className="mt-3 grid gap-2 sm:grid-cols-2">
+              <button
+                type="button"
+                onClick={() => fill("admin")}
+                className="flex items-center gap-2 rounded-sm border border-border/70 px-3 py-2 text-helper transition-colors hover:bg-accent"
+              >
+                <ShieldAlert size={16} strokeWidth={1.75} /> Admin
+              </button>
+              <button
+                type="button"
+                onClick={() => fill("employee")}
+                className="flex items-center gap-2 rounded-sm border border-border/70 px-3 py-2 text-helper transition-colors hover:bg-accent"
+              >
+                <UserCog size={16} strokeWidth={1.75} /> Employee
+              </button>
+            </div>
+            <p className="mt-3 text-caption text-muted-foreground">
+              admin@stillworks.legal / admin123 · employee@stillworks.legal / employee123
+            </p>
+          </div>
         </div>
       </div>
 
