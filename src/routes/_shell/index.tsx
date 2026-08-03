@@ -119,7 +119,7 @@ function Dashboard() {
             icon={ShieldCheck}
             action={
               <Button variant="ghost" size="sm" className="rounded-sm" asChild>
-                <Link to="/approvals">
+                <Link to="/admin/approvals">
                   Approval centre <ArrowRight size={15} strokeWidth={1.75} />
                 </Link>
               </Button>
