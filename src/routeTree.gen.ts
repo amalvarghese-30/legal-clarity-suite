@@ -10,13 +10,17 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ShellRouteImport } from './routes/_shell'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as ShellIndexRouteImport } from './routes/_shell/index'
+import { Route as ShellApprovalsRouteImport } from './routes/_shell/approvals'
+import { Route as ShellAuditLogsRouteImport } from './routes/_shell/audit-logs'
 import { Route as ShellCalendarRouteImport } from './routes/_shell/calendar'
 import { Route as ShellChatRouteImport } from './routes/_shell/chat'
 import { Route as ShellClientsRouteImport } from './routes/_shell/clients'
 import { Route as ShellDocumentsRouteImport } from './routes/_shell/documents'
 import { Route as ShellEmployeesRouteImport } from './routes/_shell/employees'
 import { Route as ShellReportsRouteImport } from './routes/_shell/reports'
+import { Route as ShellSettingsRouteImport } from './routes/_shell/settings'
 import { Route as ShellTasksRouteImport } from './routes/_shell/tasks'
 import { Route as ShellCasesIndexRouteImport } from './routes/_shell/cases.index'
 import { Route as ShellCasesCaseIdRouteImport } from './routes/_shell/cases.$caseId'
@@ -25,9 +29,24 @@ const ShellRoute = ShellRouteImport.update({
   id: '/_shell',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ShellIndexRoute = ShellIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => ShellRoute,
+} as any)
+const ShellApprovalsRoute = ShellApprovalsRouteImport.update({
+  id: '/approvals',
+  path: '/approvals',
+  getParentRoute: () => ShellRoute,
+} as any)
+const ShellAuditLogsRoute = ShellAuditLogsRouteImport.update({
+  id: '/audit-logs',
+  path: '/audit-logs',
   getParentRoute: () => ShellRoute,
 } as any)
 const ShellCalendarRoute = ShellCalendarRouteImport.update({
@@ -60,6 +79,11 @@ const ShellReportsRoute = ShellReportsRouteImport.update({
   path: '/reports',
   getParentRoute: () => ShellRoute,
 } as any)
+const ShellSettingsRoute = ShellSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => ShellRoute,
+} as any)
 const ShellTasksRoute = ShellTasksRouteImport.update({
   id: '/tasks',
   path: '/tasks',
@@ -78,23 +102,31 @@ const ShellCasesCaseIdRoute = ShellCasesCaseIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof ShellIndexRoute
+  '/login': typeof LoginRoute
+  '/approvals': typeof ShellApprovalsRoute
+  '/audit-logs': typeof ShellAuditLogsRoute
   '/calendar': typeof ShellCalendarRoute
   '/chat': typeof ShellChatRoute
   '/clients': typeof ShellClientsRoute
   '/documents': typeof ShellDocumentsRoute
   '/employees': typeof ShellEmployeesRoute
   '/reports': typeof ShellReportsRoute
+  '/settings': typeof ShellSettingsRoute
   '/tasks': typeof ShellTasksRoute
   '/cases/$caseId': typeof ShellCasesCaseIdRoute
   '/cases/': typeof ShellCasesIndexRoute
 }
 export interface FileRoutesByTo {
+  '/login': typeof LoginRoute
+  '/approvals': typeof ShellApprovalsRoute
+  '/audit-logs': typeof ShellAuditLogsRoute
   '/calendar': typeof ShellCalendarRoute
   '/chat': typeof ShellChatRoute
   '/clients': typeof ShellClientsRoute
   '/documents': typeof ShellDocumentsRoute
   '/employees': typeof ShellEmployeesRoute
   '/reports': typeof ShellReportsRoute
+  '/settings': typeof ShellSettingsRoute
   '/tasks': typeof ShellTasksRoute
   '/': typeof ShellIndexRoute
   '/cases/$caseId': typeof ShellCasesCaseIdRoute
@@ -103,12 +135,16 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_shell': typeof ShellRouteWithChildren
+  '/login': typeof LoginRoute
+  '/_shell/approvals': typeof ShellApprovalsRoute
+  '/_shell/audit-logs': typeof ShellAuditLogsRoute
   '/_shell/calendar': typeof ShellCalendarRoute
   '/_shell/chat': typeof ShellChatRoute
   '/_shell/clients': typeof ShellClientsRoute
   '/_shell/documents': typeof ShellDocumentsRoute
   '/_shell/employees': typeof ShellEmployeesRoute
   '/_shell/reports': typeof ShellReportsRoute
+  '/_shell/settings': typeof ShellSettingsRoute
   '/_shell/tasks': typeof ShellTasksRoute
   '/_shell/': typeof ShellIndexRoute
   '/_shell/cases/$caseId': typeof ShellCasesCaseIdRoute
@@ -118,23 +154,31 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/login'
+    | '/approvals'
+    | '/audit-logs'
     | '/calendar'
     | '/chat'
     | '/clients'
     | '/documents'
     | '/employees'
     | '/reports'
+    | '/settings'
     | '/tasks'
     | '/cases/$caseId'
     | '/cases/'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/login'
+    | '/approvals'
+    | '/audit-logs'
     | '/calendar'
     | '/chat'
     | '/clients'
     | '/documents'
     | '/employees'
     | '/reports'
+    | '/settings'
     | '/tasks'
     | '/'
     | '/cases/$caseId'
@@ -142,12 +186,16 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/_shell'
+    | '/login'
+    | '/_shell/approvals'
+    | '/_shell/audit-logs'
     | '/_shell/calendar'
     | '/_shell/chat'
     | '/_shell/clients'
     | '/_shell/documents'
     | '/_shell/employees'
     | '/_shell/reports'
+    | '/_shell/settings'
     | '/_shell/tasks'
     | '/_shell/'
     | '/_shell/cases/$caseId'
@@ -156,6 +204,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   ShellRoute: typeof ShellRouteWithChildren
+  LoginRoute: typeof LoginRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -167,11 +216,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ShellRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_shell/': {
       id: '/_shell/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof ShellIndexRouteImport
+      parentRoute: typeof ShellRoute
+    }
+    '/_shell/approvals': {
+      id: '/_shell/approvals'
+      path: '/approvals'
+      fullPath: '/approvals'
+      preLoaderRoute: typeof ShellApprovalsRouteImport
+      parentRoute: typeof ShellRoute
+    }
+    '/_shell/audit-logs': {
+      id: '/_shell/audit-logs'
+      path: '/audit-logs'
+      fullPath: '/audit-logs'
+      preLoaderRoute: typeof ShellAuditLogsRouteImport
       parentRoute: typeof ShellRoute
     }
     '/_shell/calendar': {
@@ -216,6 +286,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ShellReportsRouteImport
       parentRoute: typeof ShellRoute
     }
+    '/_shell/settings': {
+      id: '/_shell/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof ShellSettingsRouteImport
+      parentRoute: typeof ShellRoute
+    }
     '/_shell/tasks': {
       id: '/_shell/tasks'
       path: '/tasks'
@@ -241,12 +318,15 @@ declare module '@tanstack/react-router' {
 }
 
 interface ShellRouteChildren {
+  ShellApprovalsRoute: typeof ShellApprovalsRoute
+  ShellAuditLogsRoute: typeof ShellAuditLogsRoute
   ShellCalendarRoute: typeof ShellCalendarRoute
   ShellChatRoute: typeof ShellChatRoute
   ShellClientsRoute: typeof ShellClientsRoute
   ShellDocumentsRoute: typeof ShellDocumentsRoute
   ShellEmployeesRoute: typeof ShellEmployeesRoute
   ShellReportsRoute: typeof ShellReportsRoute
+  ShellSettingsRoute: typeof ShellSettingsRoute
   ShellTasksRoute: typeof ShellTasksRoute
   ShellIndexRoute: typeof ShellIndexRoute
   ShellCasesCaseIdRoute: typeof ShellCasesCaseIdRoute
@@ -254,12 +334,15 @@ interface ShellRouteChildren {
 }
 
 const ShellRouteChildren: ShellRouteChildren = {
+  ShellApprovalsRoute: ShellApprovalsRoute,
+  ShellAuditLogsRoute: ShellAuditLogsRoute,
   ShellCalendarRoute: ShellCalendarRoute,
   ShellChatRoute: ShellChatRoute,
   ShellClientsRoute: ShellClientsRoute,
   ShellDocumentsRoute: ShellDocumentsRoute,
   ShellEmployeesRoute: ShellEmployeesRoute,
   ShellReportsRoute: ShellReportsRoute,
+  ShellSettingsRoute: ShellSettingsRoute,
   ShellTasksRoute: ShellTasksRoute,
   ShellIndexRoute: ShellIndexRoute,
   ShellCasesCaseIdRoute: ShellCasesCaseIdRoute,
@@ -270,7 +353,18 @@ const ShellRouteWithChildren = ShellRoute._addFileChildren(ShellRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   ShellRoute: ShellRouteWithChildren,
+  LoginRoute: LoginRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
