@@ -36,8 +36,6 @@ export const Route = createFileRoute("/_admin/admin/")({
 });
 
 function AdminDashboard() {
-  const pending = approvals.filter((a) => a.status === "Pending" || a.status === "Awaiting").length;
-
   return (
     <div className="space-y-6">
       <PageHeader
@@ -66,7 +64,7 @@ function AdminDashboard() {
       />
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-6">
-        <StatCard label="Pending approvals" value={pending || approvals.length} hint="Needs your sign-off" icon={ShieldCheck} accent />
+        <StatCard label="Pending approvals" value={approvals.length} hint="Needs your sign-off" icon={ShieldCheck} accent />
         <StatCard label="Team members" value={employees.length} hint="Roles & permissions" icon={UserCog} />
         <StatCard label="Active cases" value={cases.length} hint="Firm-wide" icon={Briefcase} />
         <StatCard label="Clients" value={clients.length} hint="On record" icon={Users} />
@@ -77,7 +75,7 @@ function AdminDashboard() {
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
         <SectionCard
           title="Approval queue"
-          subtitle="Requests waiting on an administrator"
+          description="Requests waiting on an administrator"
           action={
             <Button variant="ghost" size="sm" className="rounded-md" asChild>
               <Link to="/admin/approvals">
@@ -95,16 +93,16 @@ function AdminDashboard() {
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-helper font-medium">{a.title}</p>
                   <p className="truncate text-caption text-muted-foreground">
-                    {a.requester} · {a.time}
+                    {a.by} · {a.when}
                   </p>
                 </div>
-                <StatusPill label={a.status} tone="indigo" />
+                <StatusPill label={a.kind} tone="primary" />
               </li>
             ))}
           </ul>
         </SectionCard>
 
-        <SectionCard title="Team capacity" subtitle="Workload across the firm">
+        <SectionCard title="Team capacity" description="Workload across the firm">
           <ul className="space-y-4">
             {employees.slice(0, 6).map((e) => (
               <li key={e.id}>
@@ -122,7 +120,7 @@ function AdminDashboard() {
 
       <SectionCard
         title="Recent activity"
-        subtitle="Everything happening across the firm"
+        description="Everything happening across the firm"
         action={
           <Button variant="ghost" size="sm" className="rounded-md" asChild>
             <Link to="/admin/audit-logs">
@@ -132,13 +130,15 @@ function AdminDashboard() {
         }
       >
         <ul className="divide-y divide-border/60">
-          {activity.slice(0, 6).map((a, i) => (
-            <li key={i} className="flex items-center gap-3 py-3">
+          {activity.slice(0, 6).map((a) => (
+            <li key={a.id} className="flex items-center gap-3 py-3">
               <span className="grid size-9 shrink-0 place-items-center rounded-md bg-accent text-muted-foreground">
                 <ActivityIcon size={16} strokeWidth={1.75} />
               </span>
-              <p className="min-w-0 flex-1 truncate text-helper">{a.text}</p>
-              <span className="shrink-0 text-caption text-muted-foreground">{a.time}</span>
+              <p className="min-w-0 flex-1 truncate text-helper">
+                <span className="font-medium">{a.who}</span> {a.what}
+              </p>
+              <span className="shrink-0 text-caption text-muted-foreground">{a.when}</span>
             </li>
           ))}
         </ul>
