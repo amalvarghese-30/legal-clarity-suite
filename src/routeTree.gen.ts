@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as ShellRouteImport } from './routes/_shell'
 import { Route as ShellIndexRouteImport } from './routes/_shell/index'
 import { Route as ShellCalendarRouteImport } from './routes/_shell/calendar'
+import { Route as ShellChatRouteImport } from './routes/_shell/chat'
 import { Route as ShellClientsRouteImport } from './routes/_shell/clients'
 import { Route as ShellDocumentsRouteImport } from './routes/_shell/documents'
 import { Route as ShellTasksRouteImport } from './routes/_shell/tasks'
@@ -30,6 +31,11 @@ const ShellIndexRoute = ShellIndexRouteImport.update({
 const ShellCalendarRoute = ShellCalendarRouteImport.update({
   id: '/calendar',
   path: '/calendar',
+  getParentRoute: () => ShellRoute,
+} as any)
+const ShellChatRoute = ShellChatRouteImport.update({
+  id: '/chat',
+  path: '/chat',
   getParentRoute: () => ShellRoute,
 } as any)
 const ShellClientsRoute = ShellClientsRouteImport.update({
@@ -61,6 +67,7 @@ const ShellCasesCaseIdRoute = ShellCasesCaseIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof ShellIndexRoute
   '/calendar': typeof ShellCalendarRoute
+  '/chat': typeof ShellChatRoute
   '/clients': typeof ShellClientsRoute
   '/documents': typeof ShellDocumentsRoute
   '/tasks': typeof ShellTasksRoute
@@ -69,6 +76,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/calendar': typeof ShellCalendarRoute
+  '/chat': typeof ShellChatRoute
   '/clients': typeof ShellClientsRoute
   '/documents': typeof ShellDocumentsRoute
   '/tasks': typeof ShellTasksRoute
@@ -80,6 +88,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_shell': typeof ShellRouteWithChildren
   '/_shell/calendar': typeof ShellCalendarRoute
+  '/_shell/chat': typeof ShellChatRoute
   '/_shell/clients': typeof ShellClientsRoute
   '/_shell/documents': typeof ShellDocumentsRoute
   '/_shell/tasks': typeof ShellTasksRoute
@@ -92,6 +101,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/calendar'
+    | '/chat'
     | '/clients'
     | '/documents'
     | '/tasks'
@@ -100,6 +110,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/calendar'
+    | '/chat'
     | '/clients'
     | '/documents'
     | '/tasks'
@@ -110,6 +121,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/_shell'
     | '/_shell/calendar'
+    | '/_shell/chat'
     | '/_shell/clients'
     | '/_shell/documents'
     | '/_shell/tasks'
@@ -143,6 +155,13 @@ declare module '@tanstack/react-router' {
       path: '/calendar'
       fullPath: '/calendar'
       preLoaderRoute: typeof ShellCalendarRouteImport
+      parentRoute: typeof ShellRoute
+    }
+    '/_shell/chat': {
+      id: '/_shell/chat'
+      path: '/chat'
+      fullPath: '/chat'
+      preLoaderRoute: typeof ShellChatRouteImport
       parentRoute: typeof ShellRoute
     }
     '/_shell/clients': {
@@ -185,6 +204,7 @@ declare module '@tanstack/react-router' {
 
 interface ShellRouteChildren {
   ShellCalendarRoute: typeof ShellCalendarRoute
+  ShellChatRoute: typeof ShellChatRoute
   ShellClientsRoute: typeof ShellClientsRoute
   ShellDocumentsRoute: typeof ShellDocumentsRoute
   ShellTasksRoute: typeof ShellTasksRoute
@@ -195,6 +215,7 @@ interface ShellRouteChildren {
 
 const ShellRouteChildren: ShellRouteChildren = {
   ShellCalendarRoute: ShellCalendarRoute,
+  ShellChatRoute: ShellChatRoute,
   ShellClientsRoute: ShellClientsRoute,
   ShellDocumentsRoute: ShellDocumentsRoute,
   ShellTasksRoute: ShellTasksRoute,
