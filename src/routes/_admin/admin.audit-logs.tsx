@@ -4,7 +4,7 @@ import { PageHeader } from "@/components/layout/PageHeader";
 import { Button } from "@/components/ui/button";
 import { auditLogs } from "@/lib/mock-data";
 
-export const Route = createFileRoute("/_shell/audit-logs")({
+export const Route = createFileRoute("/_admin/admin/audit-logs")({
   head: () => ({
     meta: [
       { title: "Audit Logs · StillWorks LegalOS" },

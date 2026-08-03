@@ -5,7 +5,7 @@ import { StatusPill } from "@/components/common/StatusPill";
 import { Button } from "@/components/ui/button";
 import { approvals } from "@/lib/mock-data";
 
-export const Route = createFileRoute("/_shell/approvals")({
+export const Route = createFileRoute("/_admin/admin/approvals")({
   head: () => ({
     meta: [
       { title: "Approvals · StillWorks LegalOS" },
