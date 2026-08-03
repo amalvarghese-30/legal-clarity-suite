@@ -34,7 +34,7 @@ export function SectionCard({
             </span>
           ) : null}
           <div className="min-w-0">
-            <h2 className="truncate text-card font-semibold">{title}</h2>
+            <h2 className="truncate text-title font-semibold">{title}</h2>
             {description ? (
               <p className="mt-0.5 text-helper text-muted-foreground">{description}</p>
             ) : null}
@@ -113,7 +113,7 @@ export function EmptyState({
       <span className="grid size-16 place-items-center rounded-full bg-primary/10 text-primary">
         <Icon size={26} strokeWidth={1.75} />
       </span>
-      <h3 className="mt-4 text-card font-semibold">{title}</h3>
+      <h3 className="mt-4 text-title font-semibold">{title}</h3>
       <p className="mt-1 max-w-sm text-helper text-muted-foreground">{message}</p>
       {action ? <div className="mt-5">{action}</div> : null}
     </div>

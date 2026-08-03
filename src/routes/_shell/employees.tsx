@@ -67,13 +67,13 @@ function EmployeesPage() {
                 <dt className="flex items-center gap-1.5 text-caption text-muted-foreground">
                   <Gavel size={14} strokeWidth={1.75} /> Hearings
                 </dt>
-                <dd className="num mt-1 text-card font-semibold">{e.hearings}</dd>
+                <dd className="num mt-1 text-title font-semibold">{e.hearings}</dd>
               </div>
               <div className="rounded-md bg-muted/60 p-3">
                 <dt className="flex items-center gap-1.5 text-caption text-muted-foreground">
                   <CheckSquare size={14} strokeWidth={1.75} /> Tasks
                 </dt>
-                <dd className="num mt-1 text-card font-semibold">{e.tasks}</dd>
+                <dd className="num mt-1 text-title font-semibold">{e.tasks}</dd>
               </div>
             </dl>
 

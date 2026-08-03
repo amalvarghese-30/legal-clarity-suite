@@ -144,7 +144,7 @@ function DocumentsPage() {
             <div className="grid h-40 place-items-center rounded-md bg-muted/70">
               <FileText size={34} strokeWidth={1.5} className="text-muted-foreground" />
             </div>
-            <h2 className="mt-4 truncate text-card font-semibold">{selected.name}</h2>
+            <h2 className="mt-4 truncate text-title font-semibold">{selected.name}</h2>
             <p className="truncate text-helper text-muted-foreground">{selected.caseName}</p>
             <dl className="mt-5 space-y-3 text-helper">
               {[

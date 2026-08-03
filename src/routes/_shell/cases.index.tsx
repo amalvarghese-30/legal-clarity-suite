@@ -77,7 +77,7 @@ function CasesPage() {
             <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-4">
               <div className="min-w-0">
                 <p className="num text-caption text-muted-foreground">{c.number}</p>
-                <h2 className="mt-1 truncate text-card font-semibold">{c.title}</h2>
+                <h2 className="mt-1 truncate text-title font-semibold">{c.title}</h2>
                 <p className="mt-1 truncate text-helper text-muted-foreground">
                   {c.client} · {c.court}
                 </p>
