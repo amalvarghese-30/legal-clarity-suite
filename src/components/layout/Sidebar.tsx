@@ -1,4 +1,4 @@
-import { Link, useRouterState } from "@tanstack/react-router";
+import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
 import {
   LayoutDashboard,
   Briefcase,
@@ -8,14 +8,13 @@ import {
   CalendarDays,
   MessageCircle,
   BarChart3,
-  UserCog,
   ShieldCheck,
-  ScrollText,
   Settings,
   Scale,
   LogOut,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/lib/auth";
 
 const primary = [
   { to: "/", label: "Dashboard", icon: LayoutDashboard, exact: true },
@@ -28,14 +27,12 @@ const primary = [
   { to: "/reports", label: "Reports", icon: BarChart3 },
 ];
 
-const adminOnly = [
-  { to: "/employees", label: "Employees", icon: UserCog },
-  { to: "/approvals", label: "Approvals", icon: ShieldCheck },
-  { to: "/audit-logs", label: "Audit Logs", icon: ScrollText },
-];
+
 
 export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
 
   const renderItem = (item: (typeof primary)[number]) => {
     const active = item.exact ? pathname === item.to : pathname.startsWith(item.to);
@@ -73,10 +70,16 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
 
       <nav className="mt-3 flex-1 overflow-y-auto pr-1" aria-label="Main">
         <ul className="space-y-1">{primary.map(renderItem)}</ul>
-        <p className="px-3.5 pt-6 pb-2 text-caption font-medium tracking-wide text-muted-foreground/70 uppercase">
-          Administration
-        </p>
-        <ul className="space-y-1">{adminOnly.map(renderItem)}</ul>
+        {user?.role === "admin" ? (
+          <>
+            <p className="px-3.5 pt-6 pb-2 text-caption font-medium tracking-wide text-muted-foreground/70 uppercase">
+              Administration
+            </p>
+            <ul className="space-y-1">
+              {renderItem({ to: "/admin", label: "Admin Console", icon: ShieldCheck })}
+            </ul>
+          </>
+        ) : null}
         <ul className="mt-1 space-y-1">
           {renderItem({ to: "/settings", label: "Settings", icon: Settings })}
         </ul>
@@ -85,19 +88,23 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
       <div className="mt-4 rounded-md border border-border/70 bg-card/70 p-3">
         <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3">
           <span className="grid size-10 shrink-0 place-items-center rounded-full bg-primary/12 font-display text-helper font-semibold text-primary">
-            RD
+            {user?.initials ?? "SW"}
           </span>
           <div className="min-w-0">
-            <p className="truncate text-helper font-medium">Adv. Rohan Desai</p>
-            <p className="truncate text-caption text-muted-foreground">Administrator</p>
+            <p className="truncate text-helper font-medium">{user?.name ?? "Signed out"}</p>
+            <p className="truncate text-caption text-muted-foreground">{user?.title ?? "—"}</p>
           </div>
-          <Link
-            to="/login"
+          <button
+            type="button"
             aria-label="Sign out"
+            onClick={() => {
+              signOut();
+              navigate({ to: "/login", replace: true });
+            }}
             className="grid size-9 shrink-0 place-items-center rounded-sm text-muted-foreground transition-colors duration-150 hover:bg-accent hover:text-foreground"
           >
             <LogOut size={17} strokeWidth={1.75} />
-          </Link>
+          </button>
         </div>
       </div>
     </div>
