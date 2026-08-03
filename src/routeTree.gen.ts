@@ -15,6 +15,7 @@ import { Route as ShellCalendarRouteImport } from './routes/_shell/calendar'
 import { Route as ShellChatRouteImport } from './routes/_shell/chat'
 import { Route as ShellClientsRouteImport } from './routes/_shell/clients'
 import { Route as ShellDocumentsRouteImport } from './routes/_shell/documents'
+import { Route as ShellEmployeesRouteImport } from './routes/_shell/employees'
 import { Route as ShellReportsRouteImport } from './routes/_shell/reports'
 import { Route as ShellTasksRouteImport } from './routes/_shell/tasks'
 import { Route as ShellCasesIndexRouteImport } from './routes/_shell/cases.index'
@@ -49,6 +50,11 @@ const ShellDocumentsRoute = ShellDocumentsRouteImport.update({
   path: '/documents',
   getParentRoute: () => ShellRoute,
 } as any)
+const ShellEmployeesRoute = ShellEmployeesRouteImport.update({
+  id: '/employees',
+  path: '/employees',
+  getParentRoute: () => ShellRoute,
+} as any)
 const ShellReportsRoute = ShellReportsRouteImport.update({
   id: '/reports',
   path: '/reports',
@@ -76,6 +82,7 @@ export interface FileRoutesByFullPath {
   '/chat': typeof ShellChatRoute
   '/clients': typeof ShellClientsRoute
   '/documents': typeof ShellDocumentsRoute
+  '/employees': typeof ShellEmployeesRoute
   '/reports': typeof ShellReportsRoute
   '/tasks': typeof ShellTasksRoute
   '/cases/$caseId': typeof ShellCasesCaseIdRoute
@@ -86,6 +93,7 @@ export interface FileRoutesByTo {
   '/chat': typeof ShellChatRoute
   '/clients': typeof ShellClientsRoute
   '/documents': typeof ShellDocumentsRoute
+  '/employees': typeof ShellEmployeesRoute
   '/reports': typeof ShellReportsRoute
   '/tasks': typeof ShellTasksRoute
   '/': typeof ShellIndexRoute
@@ -99,6 +107,7 @@ export interface FileRoutesById {
   '/_shell/chat': typeof ShellChatRoute
   '/_shell/clients': typeof ShellClientsRoute
   '/_shell/documents': typeof ShellDocumentsRoute
+  '/_shell/employees': typeof ShellEmployeesRoute
   '/_shell/reports': typeof ShellReportsRoute
   '/_shell/tasks': typeof ShellTasksRoute
   '/_shell/': typeof ShellIndexRoute
@@ -113,6 +122,7 @@ export interface FileRouteTypes {
     | '/chat'
     | '/clients'
     | '/documents'
+    | '/employees'
     | '/reports'
     | '/tasks'
     | '/cases/$caseId'
@@ -123,6 +133,7 @@ export interface FileRouteTypes {
     | '/chat'
     | '/clients'
     | '/documents'
+    | '/employees'
     | '/reports'
     | '/tasks'
     | '/'
@@ -135,6 +146,7 @@ export interface FileRouteTypes {
     | '/_shell/chat'
     | '/_shell/clients'
     | '/_shell/documents'
+    | '/_shell/employees'
     | '/_shell/reports'
     | '/_shell/tasks'
     | '/_shell/'
@@ -190,6 +202,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ShellDocumentsRouteImport
       parentRoute: typeof ShellRoute
     }
+    '/_shell/employees': {
+      id: '/_shell/employees'
+      path: '/employees'
+      fullPath: '/employees'
+      preLoaderRoute: typeof ShellEmployeesRouteImport
+      parentRoute: typeof ShellRoute
+    }
     '/_shell/reports': {
       id: '/_shell/reports'
       path: '/reports'
@@ -226,6 +245,7 @@ interface ShellRouteChildren {
   ShellChatRoute: typeof ShellChatRoute
   ShellClientsRoute: typeof ShellClientsRoute
   ShellDocumentsRoute: typeof ShellDocumentsRoute
+  ShellEmployeesRoute: typeof ShellEmployeesRoute
   ShellReportsRoute: typeof ShellReportsRoute
   ShellTasksRoute: typeof ShellTasksRoute
   ShellIndexRoute: typeof ShellIndexRoute
@@ -238,6 +258,7 @@ const ShellRouteChildren: ShellRouteChildren = {
   ShellChatRoute: ShellChatRoute,
   ShellClientsRoute: ShellClientsRoute,
   ShellDocumentsRoute: ShellDocumentsRoute,
+  ShellEmployeesRoute: ShellEmployeesRoute,
   ShellReportsRoute: ShellReportsRoute,
   ShellTasksRoute: ShellTasksRoute,
   ShellIndexRoute: ShellIndexRoute,
