@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { employees } from "@/lib/mock-data";
 
-export const Route = createFileRoute("/_shell/employees")({
+export const Route = createFileRoute("/_admin/admin/employees")({
   head: () => ({
     meta: [
       { title: "Employees · StillWorks LegalOS" },
