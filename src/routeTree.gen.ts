@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as AdminRouteImport } from './routes/_admin'
 import { Route as ShellRouteImport } from './routes/_shell'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ShellIndexRouteImport } from './routes/_shell/index'
@@ -26,6 +27,10 @@ import { Route as AdminAdminSettingsRouteImport } from './routes/_admin/admin.se
 import { Route as ShellCasesIndexRouteImport } from './routes/_shell/cases.index'
 import { Route as ShellCasesCaseIdRouteImport } from './routes/_shell/cases.$caseId'
 
+const AdminRoute = AdminRouteImport.update({
+  id: '/_admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ShellRoute = ShellRouteImport.update({
   id: '/_shell',
   getParentRoute: () => rootRouteImport,
@@ -76,24 +81,24 @@ const ShellTasksRoute = ShellTasksRouteImport.update({
   getParentRoute: () => ShellRoute,
 } as any)
 const AdminAdminApprovalsRoute = AdminAdminApprovalsRouteImport.update({
-  id: '/_admin/admin/approvals',
+  id: '/admin/approvals',
   path: '/admin/approvals',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AdminRoute,
 } as any)
 const AdminAdminAuditLogsRoute = AdminAdminAuditLogsRouteImport.update({
-  id: '/_admin/admin/audit-logs',
+  id: '/admin/audit-logs',
   path: '/admin/audit-logs',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AdminRoute,
 } as any)
 const AdminAdminEmployeesRoute = AdminAdminEmployeesRouteImport.update({
-  id: '/_admin/admin/employees',
+  id: '/admin/employees',
   path: '/admin/employees',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AdminRoute,
 } as any)
 const AdminAdminSettingsRoute = AdminAdminSettingsRouteImport.update({
-  id: '/_admin/admin/settings',
+  id: '/admin/settings',
   path: '/admin/settings',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AdminRoute,
 } as any)
 const ShellCasesIndexRoute = ShellCasesIndexRouteImport.update({
   id: '/cases/',
@@ -124,6 +129,7 @@ export interface FileRoutesByFullPath {
   '/cases/': typeof ShellCasesIndexRoute
 }
 export interface FileRoutesByTo {
+  '/': typeof ShellIndexRoute
   '/login': typeof LoginRoute
   '/calendar': typeof ShellCalendarRoute
   '/chat': typeof ShellChatRoute
@@ -132,7 +138,6 @@ export interface FileRoutesByTo {
   '/reports': typeof ShellReportsRoute
   '/settings': typeof ShellSettingsRoute
   '/tasks': typeof ShellTasksRoute
-  '/': typeof ShellIndexRoute
   '/admin/approvals': typeof AdminAdminApprovalsRoute
   '/admin/audit-logs': typeof AdminAdminAuditLogsRoute
   '/admin/employees': typeof AdminAdminEmployeesRoute
@@ -142,6 +147,7 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/_admin': typeof AdminRouteWithChildren
   '/_shell': typeof ShellRouteWithChildren
   '/login': typeof LoginRoute
   '/_shell/calendar': typeof ShellCalendarRoute
@@ -179,6 +185,7 @@ export interface FileRouteTypes {
     | '/cases/'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/'
     | '/login'
     | '/calendar'
     | '/chat'
@@ -187,7 +194,6 @@ export interface FileRouteTypes {
     | '/reports'
     | '/settings'
     | '/tasks'
-    | '/'
     | '/admin/approvals'
     | '/admin/audit-logs'
     | '/admin/employees'
@@ -196,6 +202,7 @@ export interface FileRouteTypes {
     | '/cases'
   id:
     | '__root__'
+    | '/_admin'
     | '/_shell'
     | '/login'
     | '/_shell/calendar'
@@ -215,16 +222,20 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  AdminRoute: typeof AdminRouteWithChildren
   ShellRoute: typeof ShellRouteWithChildren
   LoginRoute: typeof LoginRoute
-  AdminAdminApprovalsRoute: typeof AdminAdminApprovalsRoute
-  AdminAdminAuditLogsRoute: typeof AdminAdminAuditLogsRoute
-  AdminAdminEmployeesRoute: typeof AdminAdminEmployeesRoute
-  AdminAdminSettingsRoute: typeof AdminAdminSettingsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/_admin': {
+      id: '/_admin'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_shell': {
       id: '/_shell'
       path: ''
@@ -300,28 +311,28 @@ declare module '@tanstack/react-router' {
       path: '/admin/approvals'
       fullPath: '/admin/approvals'
       preLoaderRoute: typeof AdminAdminApprovalsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/_admin/admin/audit-logs': {
       id: '/_admin/admin/audit-logs'
       path: '/admin/audit-logs'
       fullPath: '/admin/audit-logs'
       preLoaderRoute: typeof AdminAdminAuditLogsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/_admin/admin/employees': {
       id: '/_admin/admin/employees'
       path: '/admin/employees'
       fullPath: '/admin/employees'
       preLoaderRoute: typeof AdminAdminEmployeesRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/_admin/admin/settings': {
       id: '/_admin/admin/settings'
       path: '/admin/settings'
       fullPath: '/admin/settings'
       preLoaderRoute: typeof AdminAdminSettingsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/_shell/cases/': {
       id: '/_shell/cases/'
@@ -339,6 +350,22 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface AdminRouteChildren {
+  AdminAdminApprovalsRoute: typeof AdminAdminApprovalsRoute
+  AdminAdminAuditLogsRoute: typeof AdminAdminAuditLogsRoute
+  AdminAdminEmployeesRoute: typeof AdminAdminEmployeesRoute
+  AdminAdminSettingsRoute: typeof AdminAdminSettingsRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminAdminApprovalsRoute: AdminAdminApprovalsRoute,
+  AdminAdminAuditLogsRoute: AdminAdminAuditLogsRoute,
+  AdminAdminEmployeesRoute: AdminAdminEmployeesRoute,
+  AdminAdminSettingsRoute: AdminAdminSettingsRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface ShellRouteChildren {
   ShellCalendarRoute: typeof ShellCalendarRoute
@@ -369,12 +396,9 @@ const ShellRouteChildren: ShellRouteChildren = {
 const ShellRouteWithChildren = ShellRoute._addFileChildren(ShellRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
+  AdminRoute: AdminRouteWithChildren,
   ShellRoute: ShellRouteWithChildren,
   LoginRoute: LoginRoute,
-  AdminAdminApprovalsRoute: AdminAdminApprovalsRoute,
-  AdminAdminAuditLogsRoute: AdminAdminAuditLogsRoute,
-  AdminAdminEmployeesRoute: AdminAdminEmployeesRoute,
-  AdminAdminSettingsRoute: AdminAdminSettingsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
